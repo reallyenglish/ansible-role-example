@@ -22,7 +22,7 @@ What your new role does
 Create your test
 ----------------
 
-Create a root directory for all your roles because your roles requires same set of rubygems. By creating roles under the directory, you will save thye number of `bundle install`.
+Create a root directory for all your roles because your roles require same set of rubygems. By creating roles under the directory, you will save the number of `bundle install`.
 
     > mkdir galaxy
     > cd galaxy
@@ -177,7 +177,7 @@ The second task creates the file from a template.
 Creating install-FreeBSD.yml
 ----------------------------
 
-This task actually install zsh.
+This task actually installs zsh.
 
     > vim tasks/install-FreeBSD.yml
 
