@@ -21,7 +21,7 @@ What your new role does
 Create your test
 ----------------
 
-Create a root directory for all your roles because your roles requires same set of rubygems.
+Create a root directory for all your roles because your roles requires same set of rubygems. By creating roles under the directory, you will save thye number of `bundle install`.
 
     > mkdir galaxy
     > cd galaxy
