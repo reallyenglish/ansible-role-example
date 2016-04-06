@@ -229,4 +229,4 @@ When your test cases still fail
 
 Inspect the VM by logging in.
 
-    > bundle kitchen login
+    > bundle exec kitchen login
