@@ -7,6 +7,7 @@ Requirements
 ============
 
 * Vagrant
+* Ansible (>= 1.8.x)
 
 Writing your first role
 =======================
