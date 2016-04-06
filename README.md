@@ -47,7 +47,7 @@ Note that versions are reference only and you might need to use newer versions.
 
 Install gems.
 
-    > bundler install --path vendor
+    > bundler install --path vendor/bundle
 
 Create your role.
 
