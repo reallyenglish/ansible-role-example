@@ -231,3 +231,16 @@ When your test cases still fail
 Inspect the VM by logging in.
 
     > bundle exec kitchen login
+
+Resources
+=========
+
+* Ansible modules http://docs.ansible.com/ansible/modules_by_category.html
+* Ansible best practices http://docs.ansible.com/ansible/playbooks_best_practices.html
+* serverspec resources http://serverspec.org/resource_types.html
+* Shared Ansible Options (vagrant options for ansible) https://www.vagrantup.com/docs/provisioning/ansible_common.html#verbose
+* test-kitchen https://github.com/test-kitchen/test-kitchen
+* kitchen-ansible https://github.com/neillturner/kitchen-ansible
+* Template Designer Documentation (template language) http://jinja.pocoo.org/docs/dev/templates/
+* ansible-filter-plugins (filters) https://github.com/lxhunter/ansible-filter-plugins
+* Multistage environment with Ansible (how to handle production and staging)  http://rosstuck.com/multistage-environments-with-ansible/
