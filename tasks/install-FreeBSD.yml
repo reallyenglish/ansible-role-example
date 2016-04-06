@@ -1,0 +1,4 @@
+---
+
+- name: Ensure zsh is installed
+  pkgng: name='zsh' state='present'
