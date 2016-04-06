@@ -7,6 +7,7 @@ Requirements
 ============
 
 * Vagrant
+* Virtualbox (>= 5.0.x, 4.x might work but the virtual box plugin on the VM box is version 5.0.x)
 * Ansible (>= 1.8.x)
 
 Writing your first role
