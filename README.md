@@ -222,3 +222,10 @@ You now have the tasks. See if the test cases pass.
     -----> Kitchen is finished. (1m14.47s)
 
 Now your tests passed.
+
+When your test cases sitll fail
+===============================
+
+Inspect the VM by logging in.
+
+    > bundle kitchen login
