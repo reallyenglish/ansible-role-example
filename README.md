@@ -3,6 +3,14 @@ Introduction
 
 In this example role, you will learn how to write a role, test cases and run them.
 
+Requirements
+============
+
+* Vagrant
+
+Writing your first role
+=======================
+
 What your new role does
 -----------------------
 
