@@ -224,7 +224,7 @@ You now have the tasks. See if the test cases pass.
 
 Now your tests passed.
 
-When your test cases sitll fail
+When your test cases still fail
 ===============================
 
 Inspect the VM by logging in.
