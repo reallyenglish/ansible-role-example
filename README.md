@@ -168,7 +168,7 @@ To pass the test cases, create the tasks.
     - name: Ensure /tmp/foo exists
       template: dest='/tmp/foo' src='foo.j2' mode=0644
 
-The first task includes a task file, `install-FreeBSD.yml`. ansible 1.9 does not support module 'package'. WHen you install a package, you need to specify package managers for different OS. That means you need to create `install-$OSNAME.yml` for each OS (2.x supports genereic wrapper module for OSes).
+The first task includes a task file, `install-FreeBSD.yml`. ansible 1.9 does not support module 'package'. When you install a package, you need to specify package managers for different OS. That means you need to create `install-$OSNAME.yml` for each OS (2.x supports genereic wrapper module for OSes).
 
 The second task creates the file from a template.
 
@@ -180,7 +180,6 @@ This task actually install zsh.
     > vim tasks/install-FreeBSD.yml
 
     ---
-
     - name: Ensure zsh is installed
       pkgng: name='zsh' state='present'
 
@@ -195,7 +194,7 @@ Create the template
 Running the test again
 ----------------------
 
-You now have the tasks. See the test cases will pass.
+You now have the tasks. See if the test cases pass.
 
     > bundle kitchen test
 
