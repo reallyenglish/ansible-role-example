@@ -142,7 +142,7 @@ Running the test
 
 Your initial test should fail.
 
-    > bundle kitchen test
+    > bundle exec kitchen test
     ...
     Failed examples:
 
@@ -198,7 +198,7 @@ Running the test again
 
 You now have the tasks. See if the test cases pass.
 
-    > bundle kitchen test
+    > bundle exec kitchen test
 
     ...
     Package "zsh"
