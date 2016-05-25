@@ -1,5 +1,0 @@
-- hosts: all
-  roles:
-    - ansible-role-example
-  vars:
-    example_file_to_create: /tmp/foo
