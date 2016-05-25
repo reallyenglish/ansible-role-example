@@ -217,6 +217,18 @@ Make the repository publi when:
 Usually, your role should be reusable, meaning it should not contain project
 specific information. Make your role generic.
 
+## Workflow
+
+* Create a feature branch
+* Change the code
+* Make sure `bundle exec kitchen test` passes on your local computer
+* `git push` the branch
+* Make sure the tests pass on Jenkins
+* Create a pull request
+* Optionally ask someone in your team to review
+* Merge the branch into master
+* Make sure all tests in master pass on Jenkins
+
 ## ACL
 
 When creating a repository, assign ACL
