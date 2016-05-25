@@ -326,6 +326,14 @@ work around in
 [Jenkinsfile](https://github.com/reallyenglish/ansible-role-nsd/blob/master/Jenkinsfile)
 in [ansible-role-nsd](https://github.com/reallyenglish/ansible-role-nsd).
 
+## Escaping "-" in markdown
+
+The default README file has a section to describe variables used in the role.
+Variables often contains "\_" and it is a PITA to escape them.
+
+[yaml2readme](https://gist.github.com/trombik/b2df709657c08d845b1d3b3916e592d3)
+can be used to create the table in README.
+
 Resources
 =========
 
