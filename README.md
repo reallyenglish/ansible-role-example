@@ -190,6 +190,15 @@ in the root of the repository, Jenkins pull the repository and run Jenkinsfile.
 
 The Jenkinsfile created by ansible-role-init does:
 
+* run Jenkinsfile on a node tagged with `virtualbox`
+* set ANSIBLE\_VAULT\_PASSWORD\_FILE so that it can decrypt files
+* clean up the current workplace directory
+* checkout the repository
+* run `bundle install`
+* run `bundle exec kitchen test`
+* run `bundle exec kitchen destroy`
+* post the build status to github
+
 # Common tasks and rules
 
 ## Public or private repository
@@ -260,17 +269,6 @@ found at:
 https://github.com/reallyenglish/ansible-role-system-user/blob/master/tasks/main.yml
 
 Note that `ansible-vault` does not support multiple passwords.
-
-# Links
-
-* run Jenkinsfile on a node tagged with `virtualbox`
-* set ANSIBLE\_VAULT\_PASSWORD\_FILE so that it can decrypt files
-* clean up the current workplace directory
-* checkout the repository
-* run `bundle install`
-* run `bundle exec kitchen test`
-* run `bundle exec kitchen destroy`
-* post the build status to github
 
 Resources
 =========
