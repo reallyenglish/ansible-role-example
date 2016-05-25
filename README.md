@@ -190,6 +190,79 @@ in the root of the repository, Jenkins pull the repository and run Jenkinsfile.
 
 The Jenkinsfile created by ansible-role-init does:
 
+# Common tasks and rules
+
+## Public or private repository
+
+Make the repository private when:
+
+* the role contains secret information, such as password, employee's name
+
+Make the repository publi when:
+
+* the role does not contain secret information
+
+Usually, your role should be reusable, meaning it should not contain project
+specific information. Make your role generic.
+
+## ACL
+
+When creating a repository, assign ACL
+
+| Team | ACL |
+|------|-----|
+| Developer | Write |
+| SysAdmins | Admin |
+
+If you want others to see the repo, assign the following ACL
+
+| Team | ACL |
+|------|-----|
+| Read and Pull | Read |
+
+## Lisence
+
+Prefer BSD license. `ansible-role-init` create the license by default.
+
+# Common pitfalls
+
+## Increase memory
+
+Default memory allocation is usually enough. However, some programs, notably
+Java programs, require 1 GB memory. Add `customize` in .kitchen.yml.
+
+    driver:
+      name: vagrant
+      customize:
+        memory: 1024
+
+## Slow services
+
+Some services start up fast but others, notably Java programs, do very slow.
+You need to `sleep` in a spec. The argument of `sleep` varies but 60 sec is a
+good starting point. Some require 150 sec.
+
+## Vault
+
+When a file contains secret information, such as password, encrypt the file
+with `ansible-vault`.
+
+    > ansible-vault create files/secret.yml
+
+Encrypt a existing file by:
+
+    > ansible-vault encrypt files/secret.yml
+
+Note that copy module and lookup() in ansible 2.0 do not suport encrypted
+files. If you need to `copy` a encrypted file, use
+[copyv](https://github.com/saygoweb/ansible-plugin-copyv). An example can be
+found at:
+https://github.com/reallyenglish/ansible-role-system-user/blob/master/tasks/main.yml
+
+Note that `ansible-vault` does not support multiple passwords.
+
+# Links
+
 * run Jenkinsfile on a node tagged with `virtualbox`
 * set ANSIBLE\_VAULT\_PASSWORD\_FILE so that it can decrypt files
 * clean up the current workplace directory
