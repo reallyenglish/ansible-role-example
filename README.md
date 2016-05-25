@@ -296,6 +296,27 @@ provision` succeeds but the second one fails).
 The second slowest part is `bundle install`. As you cannot cache HTTPS
 contents, it cannot be solved.
 
+## Caching HTTP requests
+
+When developing a role, you need to run multiple `kitchen test`. As it usually
+downloads packages from the Internet, caching reduces time. You can run a proxy
+server on your local computer and use it when it is running.
+`ansible-role-init` creates .kitchen.local.yml, which overrides .kitchen.yml.
+It sets http\_proxy and https\_proxy when a proxy server is running but do not
+use it if not.
+
+You may use any proxy server but in this example, I will use `polipo`.
+
+    > polipo logFile= daemonise=false diskCacheRoot=~/tmp/cache allowedClients='0.0.0.0/0' proxyAddress='0.0.0.0' logSyslog=false logLevel=0xff proxyPort=8080
+
+Sometimes, upstream server does not allow caching, such as FreeBSD ftp mirrors.
+You can forcibly cache contents by adding `relaxTransparency=true`.
+
+    > polipo logFile= daemonise=false diskCacheRoot=~/tmp/cache allowedClients='0.0.0.0/0' proxyAddress='0.0.0.0' logSyslog=false logLevel=0xff proxyPort=8080 relaxTransparency=true
+
+However, be careful its consequences. When the option is used and the sorce
+file is modified, you will download stale files.
+
 ## Multiple nodes in a role
 
 Sometimes, you want to test multiple nodes in a role, such as AXFR between
