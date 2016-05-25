@@ -1,0 +1,2 @@
+__example_db_dir: /var/db/example
+__example_conf: /usr/local/etc/example.conf

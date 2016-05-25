@@ -1,0 +1,7 @@
+example_user: example
+example_group: example
+example_log_dir: /var/log/example
+example_db_dir: "{{ __example_db_dir }}"
+example_service: example
+example_conf: "{{ __example_conf }}"
+example_flags: ""

@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - ansible-role-example
+  vars:
+    example_config: ""

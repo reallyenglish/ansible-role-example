@@ -1,0 +1,6 @@
+---
+
+- name: Restart example_config
+  service:
+    name: example
+    state: restarted
