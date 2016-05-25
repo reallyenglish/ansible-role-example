@@ -113,6 +113,9 @@ This task actually installs zsh.
 ansible-vault, which encrypts files, is not used in this example, but you
 generally need it later. Create a secret file. Ask sysadmins for the key.
 
+For the example, the content of the file does not matter. You may proceed with
+whatever key in the file.
+
     > touch ~/.ansible_vault_key 
     > chmod 600 ~/.ansible_vault_key
     > vim ~/.ansible_vault_key
