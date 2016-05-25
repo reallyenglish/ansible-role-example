@@ -296,6 +296,15 @@ provision` succeeds but the second one fails).
 The second slowest part is `bundle install`. As you cannot cache HTTPS
 contents, it cannot be solved.
 
+## Multiple nodes in a role
+
+Sometimes, you want to test multiple nodes in a role, such as AXFR between
+master DNS server and its slave. As `kitchen test` destroys a node when `kitchen
+veryfy` finishes, you cannot test multiple nodes in sigle `kitchen test`. See a
+work around in
+[Jenkinsfile](https://github.com/reallyenglish/ansible-role-nsd/blob/master/Jenkinsfile)
+in [ansible-role-nsd](https://github.com/reallyenglish/ansible-role-nsd).
+
 Resources
 =========
 
