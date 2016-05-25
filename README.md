@@ -217,6 +217,18 @@ Make the repository publi when:
 Usually, your role should be reusable, meaning it should not contain project
 specific information. Make your role generic.
 
+## Workflow
+
+* Create a feature branch
+* Change the code
+* Make sure `bundle exec kitchen test` passes on your local computer
+* `git push` the branch
+* Make sure the tests pass on Jenkins
+* Create a pull request
+* Optionally ask someone in your team to review
+* Merge the branch into master
+* Make sure all tests in master pass on Jenkins
+
 ## ACL
 
 When creating a repository, assign ACL
@@ -272,6 +284,55 @@ found at:
 https://github.com/reallyenglish/ansible-role-system-user/blob/master/tasks/main.yml
 
 Note that `ansible-vault` does not support multiple passwords.
+
+## Tests on Jenkins is slow
+
+the slowest part of a test is when test-kitchen transfer files to VM. See
+[issue 491](https://github.com/test-kitchen/test-kitchen/issues/491).
+kitchen-sync reduces the time but it hard-codes some kitchen-specific path,
+such as `/usr/bin/rsync` and breaks `kitchen provision` (first `kitchen
+provision` succeeds but the second one fails).
+
+The second slowest part is `bundle install`. As you cannot cache HTTPS
+contents, it cannot be solved.
+
+## Caching HTTP requests
+
+When developing a role, you need to run multiple `kitchen test`. As it usually
+downloads packages from the Internet, caching reduces time. You can run a proxy
+server on your local computer and use it when it is running.
+`ansible-role-init` creates .kitchen.local.yml, which overrides .kitchen.yml.
+It sets http\_proxy and https\_proxy when a proxy server is running but do not
+use it if not.
+
+You may use any proxy server but in this example, I will use `polipo`.
+
+    > polipo logFile= daemonise=false diskCacheRoot=~/tmp/cache allowedClients='0.0.0.0/0' proxyAddress='0.0.0.0' logSyslog=false logLevel=0xff proxyPort=8080
+
+Sometimes, upstream server does not allow caching, such as FreeBSD ftp mirrors.
+You can forcibly cache contents by adding `relaxTransparency=true`.
+
+    > polipo logFile= daemonise=false diskCacheRoot=~/tmp/cache allowedClients='0.0.0.0/0' proxyAddress='0.0.0.0' logSyslog=false logLevel=0xff proxyPort=8080 relaxTransparency=true
+
+However, be careful its consequences. When the option is used and the sorce
+file is modified, you will download stale files.
+
+## Multiple nodes in a role
+
+Sometimes, you want to test multiple nodes in a role, such as AXFR between
+master DNS server and its slave. As `kitchen test` destroys a node when `kitchen
+veryfy` finishes, you cannot test multiple nodes in sigle `kitchen test`. See a
+work around in
+[Jenkinsfile](https://github.com/reallyenglish/ansible-role-nsd/blob/master/Jenkinsfile)
+in [ansible-role-nsd](https://github.com/reallyenglish/ansible-role-nsd).
+
+## Escaping "\_" in markdown
+
+The default README file has a section to describe variables used in the role.
+Variables often contain "\_" and it is a PITA to escape them.
+
+[yaml2readme](https://gist.github.com/trombik/b2df709657c08d845b1d3b3916e592d3)
+can be used to create the table in README.
 
 Resources
 =========
