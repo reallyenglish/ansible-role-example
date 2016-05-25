@@ -285,6 +285,17 @@ https://github.com/reallyenglish/ansible-role-system-user/blob/master/tasks/main
 
 Note that `ansible-vault` does not support multiple passwords.
 
+## Tests on Jenkins is slow
+
+the slowest part of a test is when test-kitchen transfer files to VM. See
+[issue 491](https://github.com/test-kitchen/test-kitchen/issues/491).
+kitchen-sync reduces the time but it hard-codes some kitchen-specific path,
+such as `/usr/bin/rsync` and breaks `kitchen provision` (first `kitchen
+provision` succeeds but the second one fails).
+
+The second slowest part is `bundle install`. As you cannot cache HTTPS
+contents, it cannot be solved.
+
 Resources
 =========
 
