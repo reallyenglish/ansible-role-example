@@ -159,6 +159,20 @@ Inspect the VM by logging in.
 
     > bundle exec kitchen login
 
+# Integration test
+
+## test-kitchen vs integfration test
+
+`test-kitchen` is designed to test multiple platforms of single host in one
+batch. Multiple node support has been discussed (see
+https://github.com/test-kitchen/test-kitchen/issues/873), however, it is not
+implemented.
+
+On the other hand, with Vagrant, you can perform integfration test with
+multiple hosts. However, it is not easy to run an integration test that perform
+the same test against multiple platforms. With some tricks with Vagrantfile, it
+might be possible but the possibility is not explored yet.
+
 ## Jenkins file
 
 If the name of a repository starts with "ansible-role" and Jenkinsfile is found
@@ -292,6 +306,35 @@ the slowest part of a test is when test-kitchen transfer files to VM. See
 kitchen-sync reduces the time but it hard-codes some kitchen-specific path,
 such as `/usr/bin/rsync` and breaks `kitchen provision` (first `kitchen
 provision` succeeds but the second one fails).
+
+A local branch,
+[without\_full\_path\_to\_rsync](https://github.com/trombik/kitchen-sync/tree/without_full_path_to_rsync),
+fixed the issue. The branch assumes that both local, where kitchen-test is
+invoked, and remote VM have rsync installed. the following VM images are supported:
+
+* [trombik/ansible-freebsd-10.3-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-freebsd-10.3-amd64) (version 0.1.0)
+* [trombik/ansible-ubuntu-14.04-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-ubuntu-14.04-amd64) (version 0.1.0)
+
+to use rsync transport:
+
+* add the gem to Gemfile
+* define rsync transport in .kitchen.yml
+
+add the gem to Gemfile:
+
+    gem "kitchen-sync", '~> 2.1.1', :git => 'https://github.com/trombik/kitchen-sync.git', :branch => 'without_full_path_to_rsync'
+
+add the following yaml snippet to .kitchen.yml
+
+    transport:
+      name: rsync
+
+to verify the rsync transport is actually used, look at kitchen log.
+
+       Transferring files to <default-ansible-ubuntu-1404-amd64>
+       [rsync] Time taken to upload /tmp/defa....
+
+the log should contain "[rsync] ..." right after "Transferring files...".
 
 The second slowest part is `bundle install`. As you cannot cache HTTPS
 contents, it cannot be solved.
