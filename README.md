@@ -315,6 +315,15 @@ invoked, and remote VM have rsync installed. the following VM images are support
 * [trombik/ansible-freebsd-10.3-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-freebsd-10.3-amd64) (version 0.1.0)
 * [trombik/ansible-ubuntu-14.04-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-ubuntu-14.04-amd64) (version 0.1.0)
 
+[ansible-role-localtime](https://github.com/reallyenglish/ansible-role-localtime),
+which just creates a symlink to zone file on 4 platfroms, is a good example to
+see the difference.
+
+| transport | Clean up | Check out | bundle install | kitchen test | kitchen destroy | Notify |
+|===========|==========|===========|================|==============|=================|========|
+| default   |  119 ms  |   5 sec   |  2 min 29 sec  | 30 min 41 sec|      2 sec      |  30 ms |
+| rsync     |  115 ms  |  13 sec   |  3 min 17 sec  |  7 min 53 sec|      2 sec      |  30 ms |
+
 to use rsync transport:
 
 * add the gem to Gemfile
