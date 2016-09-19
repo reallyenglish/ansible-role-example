@@ -386,6 +386,27 @@ Variables often contain "\_" and it is a PITA to escape them.
 [yaml2readme](https://gist.github.com/trombik/b2df709657c08d845b1d3b3916e592d3)
 can be used to create the table in README.
 
+## Vagrant 1.8.5 and centos (possibly other OS)
+
+When vegrant replaces the key and recoonects, authentication fails. See
+[#7611](https://github.com/mitchellh/vagrant/pull/7611).
+
+    > bundle exec kitchen test centos
+    ...
+    default: Inserting generated public key within guest...
+    default: Removing insecure key from the guest if it's present...
+    default: Key inserted! Disconnecting and reconnecting using new SSH key...
+    default: Warning: Authentication failure. Retrying...
+    default: Warning: Authentication failure. Retrying...
+    default: Warning: Authentication failure. Retrying...
+    ...
+    STDERR: Timed out while waiting for the machine to boot. This means that
+    Vagrant was unable to communicate with the guest machine within
+    the configured ("config.vm.boot_timeout" value) time period.
+
+Apply the patch to your vagrant or install 1.8.6 or later (not released as of
+this writing).
+
 Resources
 =========
 
