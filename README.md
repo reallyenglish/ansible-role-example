@@ -10,6 +10,10 @@ In this example role, you will learn how to write a role, test cases and run the
 * bundler
 * git
 
+# Learn ansible
+
+See wiki page [Getting_Started](../../wiki/Getting_Started).
+
 Resources
 =========
 
