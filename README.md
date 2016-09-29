@@ -13,6 +13,7 @@ In this example role, you will learn how to write a role, test cases and run the
 Install all the requied packages by following the instructions below.
 
 | Name | Install instruction | Confirmed version |
+|------|---------------------|-------------------|
 | Vagrant | https://www.vagrantup.com/docs/installation/ | 1.8.5 |
 | Virtualbox | https://www.virtualbox.org/manual/ch02.html 5.0.14 |
 | ansible | http://docs.ansible.com/ansible/intro_installation.html | 2.1.0.0 |
