@@ -10,6 +10,15 @@ In this example role, you will learn how to write a role, test cases and run the
 * bundler
 * git
 
+Install all the requied packages by following the instructions below.
+
+| Name | Install instruction | Confirmed version |
+| Vagrant | https://www.vagrantup.com/docs/installation/ | 1.8.5 |
+| Virtualbox | https://www.virtualbox.org/manual/ch02.html 5.0.14 |
+| ansible | http://docs.ansible.com/ansible/intro_installation.html | 2.1.0.0 |
+| bundler | http://bundler.io/v1.12/#getting-started | 1.12.5 |
+| git | https://git-scm.com/book/en/v2/Getting-Started-Installing-Git | 2.5.0 |
+
 # Learn ansible
 
 See wiki page [Getting_Started](../../wiki/Getting_Started).
