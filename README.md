@@ -34,6 +34,8 @@ If you need a specific version of `ansible`, follow the steps below.
 easy_install pip
 pip install paramiko PyYAML Jinja2 httplib2 six
 ```
+Another way to install dependencies is simply installing ansible package from
+your distribution, removing it but keeping dependencies.
 
 ### Cloning the repo and setup
 
