@@ -20,9 +20,22 @@ Install all the requied packages by following the instructions below.
 | bundler | http://bundler.io/v1.12/#getting-started | 1.12.5 |
 | git | https://git-scm.com/book/en/v2/Getting-Started-Installing-Git | 2.5.0 |
 
-# Installing a specific version of ansible from git repo
+# Installing ansible from a git repo
+
+See [Running From Source](http://docs.ansible.com/ansible/intro_installation.html#running-from-source).
+
+## Installing a specific version of ansible from git repo
 
 If you need a specific version of `ansible`, follow the steps below.
+
+### Installing dependencies
+
+```sh
+easy_install pip
+pip install paramiko PyYAML Jinja2 httplib2 six
+```
+
+### Cloning the repo and setup
 
 ```sh
 git clone git://github.com/ansible/ansible.git --recursive
@@ -32,6 +45,8 @@ git submodule update
 source hacking/env-setup
 ```
 
+See the version.
+
 ```sh
 ansible --version
 ansible 2.1.0.0 (v2.1.0.0-1 b599477242) last updated 2016/10/03 15:27:32 (GMT +900)
@@ -40,7 +55,6 @@ ansible 2.1.0.0 (v2.1.0.0-1 b599477242) last updated 2016/10/03 15:27:32 (GMT +9
   config file = /etc/ansible/ansible.cfg
   configured module search path = Default w/o overrides
 ```
-
 
 # Learn ansible
 
