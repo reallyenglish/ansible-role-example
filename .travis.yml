@@ -25,10 +25,12 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/travisci/tests.yml -i tests/travisci/inventory --syntax-check
-  - wget -O ansible-role-qa https://gist.githubusercontent.com/trombik/047364853d2f8070da9d4f360b4b9da9/raw
+  - mkdir bin
+  - wget -O bin/ansible-role-qa https://gist.githubusercontent.com/trombik/047364853d2f8070da9d4f360b4b9da9/raw
+  - wget -O bin/ansible-role-init https://gist.githubusercontent.com/trombik/d01e280f02c78618429e334d8e4995c0/raw
   - rvm install ruby-2.1.10
   - rvm use 2.1.10
-  - ruby ansible-role-qa
+  - PATH="$PATH:./bin" ruby ansible-role-qa
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
