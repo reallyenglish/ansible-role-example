@@ -10,6 +10,7 @@ addons:
   apt:
     packages:
     - python-pip
+    - wget
 
 install:
   # Install ansible
@@ -24,6 +25,8 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/travisci/tests.yml -i tests/travisci/inventory --syntax-check
+  - wget -O ansible-role-qa https://gist.githubusercontent.com/trombik/047364853d2f8070da9d4f360b4b9da9/raw
+  - ruby ansible-role-qa
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
