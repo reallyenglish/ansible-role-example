@@ -76,3 +76,4 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
   hipchatSend (color: color, notify: true, message: summary)
 }
+/* vim: ft=groovy */
