@@ -62,8 +62,7 @@ ansible 2.1.0.0 (v2.1.0.0-1 b599477242) last updated 2016/10/03 15:27:32 (GMT +9
 
 See wiki page [Getting_Started](../../wiki/Getting_Started).
 
-Resources
-=========
+# Resources
 
 * [Ansible modules](http://docs.ansible.com/ansible/modules_by_category.html)
 * [Ansible best practices](http://docs.ansible.com/ansible/playbooks_best_practices.html)
