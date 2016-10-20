@@ -1,4 +1,5 @@
 node ('virtualbox') {
+
   def directory = "ansible-role-example"
   env.ANSIBLE_VAULT_PASSWORD_FILE = "~/.ansible_vault_key"
   stage 'Clean up'
@@ -9,7 +10,7 @@ node ('virtualbox') {
   dir("$directory") {
     checkout scm
   }
-  dir("$directory/$directory") {
+  dir("$directory") {
     stage 'bundle'
     try {
         sh "bundle install --path ${env.JENKINS_HOME}/vendor/bundle"
@@ -75,3 +76,4 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
   hipchatSend (color: color, notify: true, message: summary)
 }
+/* vim: ft=groovy */
