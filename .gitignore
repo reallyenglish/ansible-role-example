@@ -1,2 +1,6 @@
-doc/
 /.kitchen/
+.kitchen.local.yml
+*.swp
+.bundle/
+vendor/
+Gemfile.lock
