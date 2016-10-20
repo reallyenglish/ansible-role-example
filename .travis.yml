@@ -26,6 +26,7 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/travisci/tests.yml -i tests/travisci/inventory --syntax-check
   - wget -O ansible-role-qa https://gist.githubusercontent.com/trombik/047364853d2f8070da9d4f360b4b9da9/raw
+  - rvm install ruby-2.1.10
   - rvm use 2.1.10
   - ruby ansible-role-qa
 
