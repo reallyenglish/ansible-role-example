@@ -30,7 +30,7 @@ script:
   - wget -O bin/ansible-role-init https://gist.githubusercontent.com/trombik/d01e280f02c78618429e334d8e4995c0/raw
   - rvm install ruby-2.1.10
   - rvm use 2.1.10
-  - PATH="$PATH:./bin" ruby ansible-role-qa
+  - PATH="$PATH:./bin" ruby bin/ansible-role-qa
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
