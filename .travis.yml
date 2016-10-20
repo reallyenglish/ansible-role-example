@@ -33,6 +33,7 @@ script:
   - rvm use 2.1.10
   - git config --global user.name "Your Name"
   - git config --global user.email "you@example.com"
+  - touch .kitchen.local.yml
   - export PATH="${PATH}:${PWD}/bin"
   - ansible-role-qa
 
