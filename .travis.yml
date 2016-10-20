@@ -31,7 +31,8 @@ script:
   - chmod +x bin/*
   - rvm install ruby-2.1.10
   - rvm use 2.1.10
-  - PATH="$PATH:./bin" ansible-role-qa
+  - export PATH="$PATH:./bin"
+  - ansible-role-qa
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
