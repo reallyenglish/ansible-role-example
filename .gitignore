@@ -4,4 +4,3 @@
 .bundle/
 vendor/
 Gemfile.lock
-doc/
