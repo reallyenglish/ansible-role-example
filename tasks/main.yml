@@ -11,3 +11,4 @@
     src: foo.j2
     dest: /tmp/foo
     mode: 0644
+    validate: echo %s
