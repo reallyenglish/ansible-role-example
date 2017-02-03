@@ -62,7 +62,7 @@ ansible 2.1.0.0 (v2.1.0.0-1 b599477242) last updated 2016/10/03 15:27:32 (GMT +9
 
 # Learn ansible
 
-See wiki page [Getting_Started](../../wiki/Getting_Started).
+See [docs/README.md](docs/README.md).
 
 # Resources
 
