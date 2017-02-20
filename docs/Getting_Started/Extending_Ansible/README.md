@@ -1,10 +1,13 @@
 Table of Contents
 =================
 
+  * [Table of Contents](#table-of-contents)
   * [Filter plugin](#filter-plugin)
     * [Example](#example)
   * [Test plugin](#test-plugin)
     * [Example](#example-1)
+  * [Action plugin](#action-plugin)
+    * [Next step](#next-step)
 
 # Filter plugin
 
@@ -110,3 +113,8 @@ Create the module in `library`, such as `library/logrotate.py`.
 `ansible-role-logrotate` has an `logrotate` action and module.
 
 See [Developing Modules](http://docs.ansible.com/ansible/developing_modules.html) for writing a module.
+
+## Next step
+
+There are some pitfalls that the author has encountered, and you might, as
+well. See [Pitfalls](../Pitfalls).

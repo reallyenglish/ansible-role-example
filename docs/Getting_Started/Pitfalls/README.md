@@ -15,6 +15,7 @@ Table of Contents
     * [ansible-play works fine but no group variables is applied](#ansible-play-works-fine-but-no-group-variables-is-applied)
       * [Problem](#problem)
       * [Possible mistake](#possible-mistake)
+    * [You can ssh to a host but some ssh connection does not work](#you-can-ssh-to-a-host-but-some-ssh-connection-does-not-work)
 
 # Common pitfalls
 

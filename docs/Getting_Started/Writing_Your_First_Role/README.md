@@ -1,6 +1,7 @@
 Table of Contents
 =================
 
+  * [Table of Contents](#table-of-contents)
   * [Writing your first role](#writing-your-first-role)
     * [What your new role does](#what-your-new-role-does)
     * [Create your role](#create-your-role)
@@ -12,7 +13,7 @@ Table of Contents
     * [Set ENV](#set-env)
     * [Running the test again](#running-the-test-again)
     * [When your test cases still fail](#when-your-test-cases-still-fail)
-  * [Next step](#next-step)
+    * [Next step](#next-step)
 
 # Writing your first role
 
@@ -161,6 +162,6 @@ Inspect the VM by logging in.
 
     > bundle exec kitchen login
 
-# Next step
+## Next step
 
-Read [Creating_Role](Creating_Role)
+Read [Creating_Role](../Creating_Role)

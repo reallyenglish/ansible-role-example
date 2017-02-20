@@ -23,6 +23,7 @@ Table of Contents
     * [tasks](#tasks)
     * [tasks/main.yml](#tasksmainyml)
     * [tasks/install-{{ ansible_os_family }}.yml](#tasksinstall--ansible_os_family-yml)
+    * [tasks/configure-{{ ansible_os_family }}.yml](#tasksconfigure--ansible_os_family-yml)
     * [templates](#templates)
     * [tests](#tests)
     * [tests/serverspec](#testsserverspec)
@@ -30,6 +31,7 @@ Table of Contents
     * [tests/serverspec/default_spec.rb](#testsserverspecdefault_specrb)
     * [tests/serverspec/spec_helper.rb](#testsserverspecspec_helperrb)
     * [vars/{{ ansible_os_family }}.yml](#vars-ansible_os_family-yml)
+    * [Next step](#next-step)
 
 # Creating a role
 
@@ -232,3 +234,6 @@ The spec_helper. The default is almost always enough.
 
 OS-specific defaults.
 
+## Next step
+
+Learn [Jinja2_Basics](../Jinja2_Basics).

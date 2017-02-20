@@ -14,6 +14,7 @@ Table of Contents
   * [default.yml](#defaultyml)
     * [provision](#provision)
     * [Writing unit tests](#writing-unit-tests)
+    * [Next step](#next-step)
 
 # Unit testing
 
@@ -149,3 +150,7 @@ describe file('/etc/resolv.conf') do
   end 
 end
 ```
+
+## Next step
+
+Learn [Integration_Test](../Integration_Test).

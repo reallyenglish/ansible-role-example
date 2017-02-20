@@ -1,6 +1,7 @@
 Table of Contents
 =================
 
+  * [Table of Contents](#table-of-contents)
   * [Versioning](#versioning)
   * [Releasing a role](#releasing-a-role)
     * [Before releasing](#before-releasing)

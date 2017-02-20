@@ -1,11 +1,18 @@
 Table of Contents
 =================
 
+h  * [Table of Contents](#table-of-contents)
   * [Integration test](#integration-test)
     * [test-kitchen vs integration test](#test-kitchen-vs-integration-test)
     * [Jenkinsfile](#jenkinsfile)
     * [Rakefile](#rakefile)
       * [Rakefile for integration tests](#rakefile-for-integration-tests)
+    * [Debugging issues on a jenkins slave](#debugging-issues-on-a-jenkins-slave)
+    * [everything is slow on jenkins slave](#everything-is-slow-on-jenkins-slave)
+      * [Making sure same multiple VMs are not running](#making-sure-same-multiple-vms-are-not-running)
+      * [Stopping and removing a VM](#stopping-and-removing-a-vm)
+      * [Executing same commands in Jenkinsfile](#executing-same-commands-in-jenkinsfile)
+    * [Next step](#next-step)
 
 # Integration test
 
@@ -195,7 +202,7 @@ What it does is:
 An example `Rakefile` is automatically created if you bootstrap your role with
 `qansible`.
 
-# Debugging issues on a jenkins slave
+## Debugging issues on a jenkins slave
 
 This is _NOT_ how you debug your role, but how you debug issues only show up in
 jenkins.
@@ -212,7 +219,7 @@ state, you name it.
 sleep 10 if ENV['JENKINS_HOME']
 ```
 
-## Making sure same multiple VMs are not running
+### Making sure same multiple VMs are not running
 
 When same multiple VMs are running, for whatever reasons, that would create
 many weired failures.
@@ -223,7 +230,7 @@ VBoxManage list runningvms
 
 The command lists all running VMs.
 
-## Stopping and removing a VM
+### Stopping and removing a VM
 
 If you would like to stop a VM, you can destroy it by:
 
@@ -234,7 +241,7 @@ VBoxManage unregistervm $VMNAME --delete
 
 The result is same as `kitchen destroy` or `vagrant destroy`.
 
-## Executing same commands in `Jenkinsfile`
+### Executing same commands in `Jenkinsfile`
 
 This is the best way to reproduce the issue you are debugging. `ssh` to the
 slave and run:
@@ -245,3 +252,7 @@ sudo su jenkins
 
 Then, `cd` to the project work space and run the commands described in
 `Jenkinsfile`.
+
+## Next step
+
+Learn `[Extending_Ansible](../Extending_Ansible).
