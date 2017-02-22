@@ -10,8 +10,8 @@ When an issue is created, decide what to do with it. If the issue cannot be
 fixed soon, add `pending` label to the issue and leave a comment on why. If the
 issue can be fixed, assign the issue to a sysadmin.
 
-Unassigned issues are reviewed and discussed on weekly basis. See [Weekly
-review](#weekly-review).
+Unassigned issues are reviewed and discussed on weekly basis. See
+[Weekly_Review](../Weekly_Review) for details.
 
 ## List of labels
 
