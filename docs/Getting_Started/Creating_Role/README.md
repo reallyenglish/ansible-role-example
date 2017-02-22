@@ -223,12 +223,27 @@ All tasks specific to the application should be defined in `tasks/main.yml`.
 
 ## tasks/install-{{ ansible_os_family }}.yml
 
-When installing a package, the task should be here. ansible 2.x has
+When installing a package, the task should be here. `ansible` 2.x has
 [package](http://docs.ansible.com/ansible/package_module.html) module that
 automatically detects OS and choose appropriate package moddule for the OS.
 However, often you need additional installation tasks, too, such as configuring
 third-party repository, installing additional packages, etc. It is recommended
 to split installation tasks into multiple files.
+
+In general, the package should be installed in the order from:
+
+* the official OS distribution repository, such as official CentOS repo, and
+  offcial FreeBSD ports
+* semi-official repository, such as EPEL and PPA
+* the official vendor's repository, hashicorp for vagrant, and elastic.co for `elasticsearch`
+* Reallyenglish repository
+
+If no package is available at above sources, create one using standard
+packaging system for the platform. The package must be maintained by the
+organization.
+
+Packages must not be installed from unknown sources, or unofficial
+repositories.
 
 ## `tasks/configure-{{ ansible_os_family }}.yml`
 
