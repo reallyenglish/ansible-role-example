@@ -116,6 +116,43 @@ By supporting other platforms,
 * the role would be scrutinized 
 * you would learn other practices by different vendors
 
+## Fixed package version should be avoided
+
+In some public roles, fixed versions are sometimes used. Some even has a
+variable to specify version of a package. However, fixed version should be
+avoided because:
+
+* it is inevitable to use the latest packages these days
+* if a user needs specific version of a package, the user should maintain and
+  host the package
+* a role cannot support every version of a package (we will try but only on
+  best-effort basis
+* roles must be updated whenever upstream updates version or patch level, which
+  occur frequently
+* in most cases, different version of a package for platform version is
+  provided, thus users have to know exact version number for the OS
+
+However, there are cases where you need to install specific version of
+packages. The most notable example is Java. Multiple versions of Java SDKs are
+officially supported and some Java application require specific version.
+Another case is, when upstreams have multiple version of packages in a
+packaging system. In the past, most of distributions provided two Apache
+packages, 1.x and 2.x. There are a few options for this case.
+
+* Support multiple versions in a single role (`ansible-role-nsd`)
+* Provide the default version of the role and let users to choose (`ansible-role-java`)
+* Drop support for older version (`ansible-role-jenkins-master`)
+* Create different roles for different versions
+
+It depends on various factors to choose an option from the above. The first one
+is an ideal for users, but the cost is expensive, or it is possible only when
+the differences are small. The second option is reasonable but it has the same
+problems as in the first one. The third one looks practical in most cases.
+Jenkins 2.x has many incompatibilities and behaves very differently from 1.x,
+and there are no reason to use 1.x for new deployment. The forth one should be
+chosen when both version are widely used, e.g. apache in the past, and
+maintaining 2.x and 1.x was not practical.
+
 # Directory hier
 
 ## defaults
