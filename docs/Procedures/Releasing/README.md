@@ -39,24 +39,26 @@ When releasing a role, consider the followings:
 
 ## Release procedure
 
-Suppose, you are going to release `0.0.1`.
+For initial release, use `1.0.0`.
+
+Suppose, you are going to release `1.0.0`
 
 * Notify other members of the repository that you are going to release the role
 * Create a pre-release branch
     * `git checkout master`
     * `git pull master`
-    * `git checkout -b 'release_0.0.1'`
+    * `git checkout -b 'release_1.0.0'`
 * Push the branch
-    * `git push --set-upstream origin release_0.0.1`
+    * `git push --set-upstream origin release_1.0.0`
 * Do the last work on the branch if any
 * Update `CHANGELOG.md` and commit
 * Make sure Jenkins test passes in the branch
-    * Open the github repository, [branches] -> [0.0.1]
+    * Open the github repository, [branches] -> [1.0.0]
 * Create a release on github
     * [releases] -> [Create a new release]
-    * [Tag version] -> `0.0.1`
-    * [Target] -> `release_0.0.1`
-    * [Release title] -> `0.0.1`
+    * [Tag version] -> `1.0.0`
+    * [Target] -> `release_1.0.0`
+    * [Release title] -> `1.0.0`
     * Describe the release in the release note
     * tick [This is a pre-release] if the release is not a public release
 * Review the release
