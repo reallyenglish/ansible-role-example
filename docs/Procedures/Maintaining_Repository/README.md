@@ -44,8 +44,17 @@ The initial state of the newly created repository should be empty.
 * Make sure that `Initialize this repository with a README` is NOT selected (default)
 * Click `Create repository` to create one
 
-Push your loocal repository to Github by following the instructions shown in
-the next page.
+When you click `Create repository`, instructions will be shown. Push your
+loocal repository to Github by following the instructions shown in the page. In
+short:
+
+* add the github repository as `origin`
+* push the local repository to the `origin`
+
+```
+git remote add origin remote $URL
+git push origin master
+```
 
 Proceed to [Configuring the repository](#configuring-the-repository).
 
