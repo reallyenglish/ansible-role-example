@@ -72,6 +72,15 @@ After creating a repository, assign ACL.
 
 TBW
 
+### Creating labels
+
+Github provides some default labels. In addition, create some additional labels.
+
+* visit `Issues`
+* click `Labels`
+* click `New label`
+* create non-default labels listed at [Triaging_Issue](../Triaging_Issue)
+
 ### Enabling automatic tests
 
 The following tests must be enabled.
