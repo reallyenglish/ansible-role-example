@@ -46,7 +46,8 @@ Suppose, you are going to release `1.0.0`
 * Notify other members of the repository that you are going to release the role
 * Create a pre-release branch
     * `git checkout master`
-    * `git pull master`
+    * `git pull
+        * make sure that your default action for `pull` is rebase, see [Fixing an issue](../Fixing_Issue/README.md#fixing-an-issue-1)
     * `git checkout -b 'release_1.0.0'`
 * Push the branch
     * `git push --set-upstream origin release_1.0.0`
