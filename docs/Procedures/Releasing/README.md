@@ -55,6 +55,9 @@ Suppose, you are going to release `1.0.0`
 * Update `CHANGELOG.md` and commit
 * Make sure Jenkins test passes in the branch
     * Open the github repository, [branches] -> [1.0.0]
+* Create a PR for the release. See
+  [Creating_Pull_Request](../Creating_Pull_Request).
+    * When you merge the PR, do NOT delete the branch yet
 * Create a release on github
     * [releases] -> [Create a new release]
     * [Tag version] -> `1.0.0`
