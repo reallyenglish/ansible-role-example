@@ -16,6 +16,7 @@ Table of Contents
       * [Problem](#problem)
       * [Possible mistake](#possible-mistake)
     * [You can ssh to a host but some ssh connection does not work](#you-can-ssh-to-a-host-but-some-ssh-connection-does-not-work)
+    * [ansible fails when you test if a variable is empty and the variable is a string](#ansible-fails-when-you-test-if-a-variable-is-empty-and-the-variable-is-a-string)
 
 # Common pitfalls
 
@@ -256,3 +257,56 @@ of `-i`.
 The
 [diff](https://github.com/trombik/vagrant/compare/master...trombik:percent_expand)
 solves the issue. You need to apply the patch to `vagrant` on Jenkins.
+
+## `ansible` fails when you test if a variable is empty and the variable is a string
+
+The following task fails:
+
+```yaml
+- name: Install ca_key.pem
+  template:
+    src: ca_key.pem.j2
+    dest: "{{ fluentd_certs_dir }}/ca_key.pem"
+    mode: 0440
+    owner: "{{ fluentd_user }}"
+    group: "{{ fluentd_group }}"
+    validate: openssl rsa -check -noout -passin env:FLUENTD_CA_PASS -in %s
+  environment:
+    FLUENTD_CA_PASS: "{{ fluentd_ca_private_key_passphrase }}"
+  when: fluentd_ca_key
+```
+
+with an error:
+
+```
+The conditional check 'fluentd_ca_key' failed. The error was: expected token 'end of statement block', got 'RSA'
+```
+
+This happens because `ansible` `eval` the variable and if the value is boolean,
+it works but not if the variable is a string, just like above.
+
+In this case, you should use `is defined` and `!= ''`.
+
+```yaml
+- name: Install ca_key.pem
+  template:
+    src: ca_key.pem.j2
+    dest: "{{ fluentd_certs_dir }}/ca_key.pem"
+    mode: 0440
+    owner: "{{ fluentd_user }}"
+    group: "{{ fluentd_group }}"
+    validate: openssl rsa -check -noout -passin env:FLUENTD_CA_PASS -in %s
+  environment:
+    FLUENTD_CA_PASS: "{{ fluentd_ca_private_key_passphrase }}"
+  when:
+    - fluentd_ca_key is defined
+    - fluentd_ca_key != ''
+```
+
+This is [what a dev says](https://github.com/ansible/ansible/issues/20392#issuecomment-280430379):
+
+> that actually happens on older versions of Ansible as well, so that case is
+> not a regression, it's just a side-effect of the fact that we allow bare
+> variables like this in conditionals. The correct solution is to use is
+> defined in these kinds of situations where the variable may not contain a
+> boolean value.
