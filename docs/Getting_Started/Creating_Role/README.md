@@ -155,9 +155,13 @@ maintaining 2.x and 1.x was not practical.
 
 # Directory hier
 
-## defaults
+## defaults/main.yml
 
-The directory of default values.
+This file lists all the variables used in the role except variables prefixed
+with`register_`, and `__`. When you add a variable to the role, always define
+the variable here. It will prevents undocumented variables in `README.md` and
+`AnsibleUndefinedVariable`, which should not happen unless it is an expected
+behaviour.
 
 ## extra_modules
 
@@ -191,9 +195,54 @@ Optional meta data file for galaxy.
 
 `rake test` runs `rake test` in sub directories under `test/integration`.
 
-## README.md
+## `README.md`
 
-Document your role here
+Document your role here.
+
+The first section should be the name of the role and its content
+should be a description of the role. Simple description is enough.
+If the role has any specific notes, warnings to users, they should
+be documented.An example:
+
+```
+# ansible-role-foo
+
+Configures foo
+
+## Notes for users
+
+The role would kills a kitten if used without care.
+```
+
+The description should also be set in the repository's description. You can set
+the description of the repository when you create the repository or in the top
+page of the Github repository.
+
+The second section is "Requirements". Any requirements to use the role should
+be documented.
+
+"Role Variables" section should list all the variables that are
+exposed to users. If a variable refers to another OS-specific
+variable prefixed with `__`, the referenced variable should be
+listed in a subsection. An example:
+
+```
+# Role Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `example_foo` | an example variable | `{{ __example_foo }}` |
+
+## FreeBSD
+
+| Variable | Default |
+|----------|---------|
+| `__example_foo` | `bar` |
+```
+
+"Example Playbook" should show an example playbook. The example should always
+work. To ensure the example works, update the section with the unit test in the
+role.
 
 ## tasks
 
