@@ -17,6 +17,7 @@ Table of Contents
       * [Possible mistake](#possible-mistake)
     * [You can ssh to a host but some ssh connection does not work](#you-can-ssh-to-a-host-but-some-ssh-connection-does-not-work)
     * [ansible fails when you test if a variable is empty and the variable is a string](#ansible-fails-when-you-test-if-a-variable-is-empty-and-the-variable-is-a-string)
+    * [assert task cannot be tested in unit test](#assert-task-cannot-be-tested-in-unit-test)
 
 # Common pitfalls
 
@@ -310,3 +311,29 @@ This is [what a dev says](https://github.com/ansible/ansible/issues/20392#issuec
 > variables like this in conditionals. The correct solution is to use is
 > defined in these kinds of situations where the variable may not contain a
 > boolean value.
+
+## `assert` task cannot be tested in unit test
+
+[`assert`](http://docs.ansible.com/ansible/assert_module.html) is one of
+useful, but often overlooked module. It evaluates conditions and throws fatal
+error if a condition is false, a kind of unit test, or "built-in" test in
+`ansible` play. It is [one of officially recommended methods of testing
+strategy](http://docs.ansible.com/ansible/test_strategies.html). It is good
+idea to test something in a role, in addition to unit tests. The built-in tests
+are different from unit tests and integration test:
+
+* built-in test is executed during the `ansible` play (unit and integration
+  test do not), which means the test is executed in role development and
+  production where the role is actually used
+* built-in test knows internals of the role, has access to variables, and facts
+
+However, built-in test cannot be tested in unit or integration tests because
+both expect successful `ansible` play. If the built-in test fails, the test
+itself is considered as failure, and they are not executed.
+
+To test built-in test ("does the `assert` task throw an error when a condition is
+not true?), you need another test strategy that:
+
+* runs `ansible` play
+* ignore failure if `ansible` play fails
+* runs other tests
