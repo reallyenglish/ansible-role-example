@@ -177,7 +177,88 @@ Required gems are installed by `bundler`.
 
 ## handlers/main.yml
 
-All the handlers that are called by ansible modules.
+All the handlers that are called by tasks in roles.
+
+In most cases, you would need a `Restart foo service` handler here. Notify it
+when a service needs to be restarted.
+
+```yaml
+- name: Restart foo
+  service:
+    name: foo
+    state: restarted
+```
+
+Note that `state: restarted` means _full_ restart; the service will be stopped
+and started. Some services support `reload`, reloading changes that have been
+made without doing full restart. If the service supports reload, `Reload foo`
+should be created. In most cases, `init.d` script, `systemd` unit file, or
+`rc.subr(8)` accepts `reload` action. In that case, simply use `state:
+reloaded`.
+
+```yaml
+- nameL Reload foo
+  service:
+    name: foo
+    state: reloaded
+```
+
+Do *NOT* use `enabled: true` in a service handler. For example, the following
+tasks and a handler might looks safe, but they are not.
+
+```yaml
+# in tasks/main.yml
+
+- name: Create foo.conf
+  template:
+    src: foo.conf.j2
+    dest: /etc/foo.conf
+    notifies: Restart foo
+
+- name: Start foo
+  service:
+    name: foo
+    enabled: yes
+
+# in handlers/main.yml
+
+- name: Restart foo
+  service:
+    name: foo
+    state: restarted
+    enabled: yes
+```
+
+It would work until `arguments` is added to `Start foo`.
+
+```yaml
+# in tasks/main.yml
+
+- name: Create foo.conf
+  template:
+    src: foo.conf.j2
+    dest: /etc/foo.conf
+    notifies: Restart foo
+
+- name: Start foo
+  service:
+    name: foo
+    enabled: yes
+    arguments: "{{ foo_flags }}"
+
+# in handlers/main.yml
+
+- name: Restart foo
+  service:
+    name: foo
+    state: restarted
+    enabled: yes
+```
+
+The `arguments` changes the behaviour of the task, which breaks idempotency
+test. The behaviour would have been same if the handler had `arguments` and the
+same value. Before scratching your head, simply _DO NOT USE_ `enabled` in
+handler.
 
 ## Jenkinsfile
 
@@ -247,6 +328,30 @@ role.
 ## tasks
 
 The directory for all the tasks.
+
+### `shell`
+
+When you need redirection, pipe, `if`, `while`, `&&`, or `||`, use `shell` module.
+
+```yaml
+- name: See if command output contains bar
+  shell: foo | grep bar
+  register: register_foo
+  changed_when: false
+
+# do something with the result
+...
+```
+
+But when a variable is used, always use `quote` filter to prevent shell injection.
+
+```yaml
+- name: See if command output contains bar
+  shell: "foo | grep {{ item | quote }}"
+  register: register_foo
+  with_items: "{{ some_list }}"
+  changed_when: false
+```
 
 ## tasks/main.yml
 

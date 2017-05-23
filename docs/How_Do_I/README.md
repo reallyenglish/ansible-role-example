@@ -55,6 +55,9 @@ Table of Contents
     * [How do I update a Vagrant box?](#how-do-i-update-a-vagrant-box)
       * [Problem](#problem-15)
       * [Solution](#solution-15)
+    * [How do I test a case that is not idempotent?](#how-do-i-test-a-case-that-is-not-idempotent)
+      * [Problem](#problem-16)
+      * [Solution](#solution-16)
 
 ## How do I remove sensitive information from logs?
 
@@ -645,3 +648,99 @@ rm Vagrantfile
 ```
 
 TODO automate the update procedure
+
+## How do I test a case that is not idempotent?
+
+### Problem
+
+Your test case would change the system being tested, but that causes test
+failure in the second ansible play when `idempotency_test` is `true`, which is
+our default. One of typical use case is, you would like to test tasks that add
+and remove something. Testing the former case is easy. Add the thing that does
+not exist in the default system, and see if it has been added in the test.
+However, the latter requires you to add the thing to the default system
+*before* the test, which means every ansible play changes the system.
+
+An example:
+
+* a task in `pre_tasks` creates `X` on the system so that the role can remove it in the play
+* a task in the role removes `X`
+
+When the test above runs with `idempotency_test: true`, the test would fail
+because the task in the role always removes `X`.
+
+### Solution
+
+Create a test suite that tests the above scenario with `idempotency_test:
+false`.
+
+In `.kitchen.yml`, `idempotency_test` should be `true` by default.
+
+```yaml
+provisioner:
+  hosts: test-kitchen
+  name: ansible_playbook
+  ... other defaults ...
+  idempotency_test: true
+```
+
+In `suites`, override `idempotency_test`.
+
+```yaml
+suites:
+  - name: default
+    provisioner:
+      name: ansible_playbook
+      playbook: tests/serverspec/default.yml
+    verifier:
+      name: shell
+      command: rspec -c -f d -I tests/serverspec tests/serverspec/default_spec.rb
+
+  - name: empty_devfsrules_devfs_system_ruleset
+    provisioner:
+      name: ansible_playbook
+      playbook: tests/serverspec/empty_devfsrules_devfs_system_ruleset.yml
+
+      # XXX disable idempotency_test as this test always change the system
+      idempotency_test: false
+    verifier:
+      name: shell
+      command: rspec -c -f d -I tests/serverspec tests/serverspec/empty_devfsrules_devfs_system_ruleset_spec.rb
+```
+
+Create tasks in `pre_tasks` that add something. Note that the tasks in
+`pre_tasks` should have `changed_when: false` because you would like to know
+only the number of changes that the role has made to the system.
+
+```yaml
+- hosts: localhost
+  pre_tasks:
+    # test if the role removes devfs_system_ruleset from rc.conf(5) when
+    # devfsrules_devfs_system_ruleset is ""
+    - shell: "echo devfs_system_ruleset=foo | sudo tee -a /etc/rc.conf"
+      changed_when: false
+    - command: "grep devfs_system_ruleset /etc/rc.conf"
+      changed_when: false
+  roles:
+    - ansible-role-devfsrules
+  vars:
+    devfsrules:
+      - name: devfsrules_jail_with_bpf
+        number: 100
+        rules: |
+          add include $devfsrules_hide_all
+          add include $devfsrules_unhide_basic
+          add include $devfsrules_unhide_login
+          add path 'bpf*' unhide
+          add path 'net*' unhide
+          add path 'tun*' unhide
+      - name: my_rule
+        number: 999
+        rules: |
+          add path 'tun*' hide
+          # choose a device that exists in the VM and is safe to hide
+          add path led/em0 hide
+          add path 'bpf' user root
+          add path 'bpf' group network
+          add path 'bpf' mode 660
+```
