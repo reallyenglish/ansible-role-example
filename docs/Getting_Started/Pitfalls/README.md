@@ -18,6 +18,7 @@ Table of Contents
     * [You can ssh to a host but some ssh connection does not work](#you-can-ssh-to-a-host-but-some-ssh-connection-does-not-work)
     * [ansible fails when you test if a variable is empty and the variable is a string](#ansible-fails-when-you-test-if-a-variable-is-empty-and-the-variable-is-a-string)
     * [assert task cannot be tested in unit test](#assert-task-cannot-be-tested-in-unit-test)
+    * [arguments in service module does not do what you expect](#arguments-in-service-module-does-not-do-what-you-expect)
 
 # Common pitfalls
 
@@ -337,3 +338,34 @@ not true?), you need another test strategy that:
 * runs `ansible` play
 * ignore failure if `ansible` play fails
 * runs other tests
+
+## `arguments` in service module does not do what you expect
+
+[`service` module](http://docs.ansible.com/ansible/service_module.html) has `arguments`, and its description states:
+
+> Additional arguments provided on the command line
+
+It does not states _which_ command the `arguments` is passed to. In most
+distributions, it is service management command, such as `systemctl`, or
+`service(8)`, which makes sense. Except [OpenBSD](https://github.com/ansible/ansible/commit/6594a1458df6c6b5a711d9b3052074df631391fe#diff-feb33e2d626dfa74de00b4ffe094e1a0R1013).
+
+> If there are arguments from the user we use these as flags unless
+> they are already set.
+
+Unfortunately, this causes failures in tests, or confusions. Extra command line
+flags are managed differently in distributions. In most cases, there are not
+only flags but multiple variables to override defaults. Using `template` module
+for `/etc/rc.conf.d/foo`, `/etc/default/foo`, and `/etc/sysconfig/foo` is the
+usual practice.
+
+When using `arguments` in `service` module, do remember the difference. You
+almost always need to write something like:
+
+```yaml
+- name: Enable foo
+  service:
+    name: foo
+    arguments: "{% if ansible_os_family == 'OpenBSD' %}{{ flags }}{% endif %}"
+    enable: yes
+    ...
+```

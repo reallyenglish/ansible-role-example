@@ -9,8 +9,12 @@ Table of Contents
     * [Make it dumb](#make-it-dumb)
     * [Use validate where possible](#use-validate-where-possible)
     * [Support multiple platforms](#support-multiple-platforms)
+    * [Fixed package version should be avoided](#fixed-package-version-should-be-avoided)
+    * [Coding style](#coding-style)
+      * [YAML](#yaml)
+      * [Ruby](#ruby)
   * [Directory hier](#directory-hier)
-    * [defaults](#defaults)
+    * [defaults/main.yml](#defaultsmainyml)
     * [extra_modules](#extra_modules)
     * [filter_plugins](#filter_plugins)
     * [Gemfile and Gemfile.lock](#gemfile-and-gemfilelock)
@@ -21,6 +25,7 @@ Table of Contents
     * [Rakefile](#rakefile)
     * [README.md](#readmemd)
     * [tasks](#tasks)
+      * [shell](#shell)
     * [tasks/main.yml](#tasksmainyml)
     * [tasks/install-{{ ansible_os_family }}.yml](#tasksinstall--ansible_os_family-yml)
     * [tasks/configure-{{ ansible_os_family }}.yml](#tasksconfigure--ansible_os_family-yml)
@@ -153,6 +158,84 @@ and there are no reason to use 1.x for new deployment. The forth one should be
 chosen when both version are widely used, e.g. apache in the past, and
 maintaining 2.x and 1.x was not practical.
 
+## Coding style
+
+### YAML
+
+Use two spaces for indent.
+
+Use `name:` always. You MAY omit it for the following modules:
+
+* `set_fact`
+* `include_vars`
+* `include`
+* `debug` (but it should not be committed)
+
+In YAML, always prefer:
+
+```yaml
+- name: Install foo
+  apt:
+    name: foo
+    state: present
+```
+
+Instead of:
+
+```yaml
+- name: Install foo
+  apt: "name=foo state=present"
+```
+
+A list should be in the form of:
+
+```yaml
+foo:
+  - bar
+  - buz
+```
+
+Instead of:
+
+```yaml
+foo: [ bar, buz ]
+```
+
+Use one-line form only when necessary. An example:
+
+```yaml
+foo: "{% if ansible_os_family == 'OpenBSD' %}[ bar ]{% else %}[ bar, buz ]{% endif %}"
+```
+
+For dict, prefer:
+
+```yaml
+foo:
+  bar: buz
+```
+
+Instead of:
+
+```yaml
+foo: { bar: buz }
+```
+
+Assign an empty list, or dict as default. An example:
+
+```yaml
+foo_dict: {}
+```
+
+Instead of:
+
+```yaml
+foo_dict:
+```
+
+### Ruby
+
+Use the provided `.rubocop.yml`
+
 # Directory hier
 
 ## defaults/main.yml
@@ -162,6 +245,20 @@ with`register_`, and `__`. When you add a variable to the role, always define
 the variable here. It will prevents undocumented variables in `README.md` and
 `AnsibleUndefinedVariable`, which should not happen unless it is an expected
 behaviour.
+
+It is strongly encouraged to provide path to PID file even when the role does
+not use it in any way. An example:
+
+```yaml
+foo_pid_dir: "{{ __foo_pid_dir }}"
+foo_pid_file: "{{ foo_pid_dir }}/foo.pid"
+
+```
+
+Users can use the variable to send signals, very useful to send `SIGHUP` in
+`logrotate` script. Do not hard-code the path to PID file because PID directory
+is not always `/var/run`. Provide a variable to PID directory so that users can
+override it.
 
 ## extra_modules
 
