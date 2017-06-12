@@ -418,9 +418,13 @@ listed in a subsection. An example:
 | `__example_foo` | `bar` |
 ```
 
+`ansible` facts (`set_fact`) used in the role MAY be documented when the facts
+are only used in tasks. If a fact in the role is visible to users, such as when
+the fact is used in `defaults/main.yml`,  the fact MUST be documented.
+
 "Example Playbook" should show an example playbook. The example should always
-work. To ensure the example works, update the section with the unit test in the
-role.
+work. To ensure the example works, update the section with the playbook for
+unit test in the role.
 
 ## tasks
 
