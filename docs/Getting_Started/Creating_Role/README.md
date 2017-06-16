@@ -11,6 +11,10 @@ Table of Contents
     * [Support multiple platforms](#support-multiple-platforms)
     * [Fixed package version should be avoided](#fixed-package-version-should-be-avoided)
     * [Coding style](#coding-style)
+      * [Comments](#comments)
+        * [Standard comments](#standard-comments)
+        * [Emphasized comments](#emphasized-comments)
+        * [TODO comments](#todo-comments)
       * [YAML](#yaml)
       * [Ruby](#ruby)
   * [Directory hier](#directory-hier)
@@ -159,6 +163,88 @@ chosen when both version are widely used, e.g. apache in the past, and
 maintaining 2.x and 1.x was not practical.
 
 ## Coding style
+
+### Comments
+
+#### Standard comments
+
+A standard comment is a comment just for information, clarification and
+reminder. It is not a warning, but a helpful, or casual, note for readers with
+less emphasis. Standard comments should start without `XXX`, or `TODO`.
+
+Standard comments may be removed without acknowledgement from the author, but
+it is strongly recommended to confirm your understanding of the context,
+solution to the issue, or the way it was fixed is correct.
+
+```yaml
+- name: Install foo
+  # install ruby gem `foo`, which is not required but often useful when scripting
+  gem:
+    name: foo
+    state: present
+```
+
+#### Emphasized comments
+
+An emphasized comment is a comment that needs strong attention, describes
+issues that takes hours to get fixed without prior knowledge, causes issues in
+production when ignored, or documents (possible) bugs. An emphasized comment
+must start with `XXX`.
+
+An emphasized comment should be created when something that should be avoided
+in production, that is generally NOT recommended, but used in the code.  When
+code does not do the "Right Thing &copy;", it should be documented as an
+emphasized comment which describes why it is not _right_ and was coded in that
+way.
+
+An emphasized comment should be documented with references, such as URLs, issue
+number, line number of a commit, or PR number, if any.
+
+Emphasized comments must be removed with acknowledgement from the author, or in
+case of absent author, from other members.
+
+Use `TODO` when the comment implies issue that needs to be fixed, instead of
+`XXX`.
+
+```yaml
+- name: Restart mountd OpenBSD
+  # XXX /etc/rc.d/mountd has 'rc_stop=NO'. you cannot restart it even when
+  # mountd_flags has changed.
+  #
+  # if there is need to send a SIGTERM to mountd(8), it should be done
+  # manually as there is too much involved with RPC daemons to make it
+  # automagic.
+  # https://github.com/openbsd/src/commit/9217ca7aa6c2a8a0f0d5bd8516dbc7273e3686d2
+  shell: pkill mountd
+  notify:
+    - Start mountd OpenBSD
+    state: present
+```
+
+#### TODO comments
+
+A TODO comment is a comment that describes what should be done in the future.
+It should start with `TODO`.
+
+TODO comment must have a corresponding issue.
+
+TODO  comments must be removed when and only when the corresponding issue
+is closed, and with acknowledgement from the author, or in case of absent
+author, from other members.
+
+When removing a TODO comment, all the related issues must be fixed and closed.
+The commit that removes TODO comment should have issue numbers of related
+issues so that the issues are automatically closed (see [Closing issues via
+commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/)).
+
+A TODO comment must have corresponding issue number, and should be documented
+with references, such as URLs, line number of a commit, or PR number, if any.
+
+```yaml
+- set_fact:
+    # TODO remove equalto.py from `test_plgins`. see #9
+    rabbitmq_plugins_enable:  "{{ rabbitmq_plugins | selectattr('state', 'equalto', 'enabled')  | list }}"
+```
 
 ### YAML
 
