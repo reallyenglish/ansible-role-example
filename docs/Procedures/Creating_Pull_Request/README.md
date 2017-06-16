@@ -32,10 +32,19 @@ When you create a PR, follow the procedures below.
 
 You need to prepare for the PR before creating one.
 
+### Leaving comments
+
+When something should be fixed, but cannot be for the moment, leave a TODO
+comment, create an Issue, and mention the comment in the Issue. See FIXME(the
+document is being reviewed, see [the PR](https://github.com/reallyenglish/ansible-role-example/pull/108)).
+
 ###  Performing all tests locally
 
 All tests should be tested in your local environment and pass the tests. The
-tests includes `qansible qa`, `kitchen test` and the integration test.
+tests includes `qansible qa`, `kitchen test` and the integration test. There
+may exist valid reasons in particular circumstances where you cannot test
+locally. It is strongly encouraged to follow this rule, or prepare your
+justification.
 
 ### Pushing the branch
 
@@ -99,7 +108,8 @@ Assign the PR to yourself.
 
 ### Reviewers
 
-Request a review by assigning it to one or more of Project Members.
+Request a review by assigning it to one or more of Project Members when the all
+required tests have passed. Choose one with enough knowledge of the context.
 
 ### Submit the PR
 
