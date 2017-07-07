@@ -520,13 +520,19 @@ do not want to require the dependent role in other platforms.
 
 ### Solution
 
-Conditionally require the dependent role in the playbook.
+Conditionally require the dependent role in the playbook. Note that this is
+`soft` dependency (more on later).
+
+Suppose, a package is in the official package repositories except `RedHat`. The
+upstream provides a package repository for `RedHat`. The role needs to add the
+repository.
 
 ```yaml
 ---
 - hosts: localhost
   roles:
-    - { role: reallyenglish.redhat-repo, when: ansible_os_family == "RedHat" }
+    - role: reallyenglish.redhat-repo
+      when: ansible_os_family == "RedHat"
     - ansible-role-elasticsearch
   vars:
     elasticsearch_cluster_name: testcluster
@@ -538,17 +544,6 @@ Conditionally require the dependent role in the playbook.
         gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
         gpgcheck: yes
         enabled: yes
-```
-
-You can do the same thing in `meta/main.yml` like:
-
-```yaml
----
-galaxy_info:
-  author: Me
-  ... other information for galaxy ...
-dependencies:
-  - { role: reallyenglish.redhat-repo, when: ansible_os_family == "RedHat" }
 ```
 
 Also, create `requiements.yml` in the role's root directory, something like:
@@ -599,6 +594,40 @@ dependencies on initial scan. #14289](https://github.com/ansible/ansible/issues/
 > Roles are brought in as pre-processor statements essentially, and any
 > conditionals applied to them are inherited by their tasks. Conditionals do
 > not stop roles from being parsed
+
+The above example is `soft` dependency. The other dependency is `hard`
+dependency. The `soft` dependency is not necessarily a dependency of the
+package being managed. `reallyenglish.redhat-repo` would have been unnecessary
+if the package was in the official package repository. When the package
+eventually gets included in the repository, `reallyenglish.redhat-repo` will be
+removed. This is why it is called `soft` dependency. Soft dependency can be
+overridden by users. Users might be able to add different yum repository by
+other means. The role does not care. The only requirement is successful `yum`
+task.
+
+On the other hand, `hard` dependency is used when the role depends others no
+matter what. Suppose a package is a commercial product and it will never get
+included in the official repository, but only available in the vendor's
+repository. Then, the dependency is `hard`. In this case, the role must add the
+vendor's repository as a yum repository. You can create `hard` dependency in
+`meta/main.yml`.
+
+```yaml
+---
+galaxy_info:
+  author: Me
+  ... other information for galaxy ...
+dependencies:
+  - { role: reallyenglish.redhat-repo, when: ansible_os_family == "RedHat" }
+```
+
+The major difference is that, `hard` dependency cannot be removed by users. It
+might not be ideal for users, users might have their own repository to provide
+the package, but the role always depends on the dependent role (but in case of
+the example, you may nullify the effect by not supplying any values to the
+dependent role). The other difference is, the dependent role is always executed
+before the depending role. In some cases, you might need different order. In
+that case, it is only possible with `soft` dependency.
 
 ## How do I update a Vagrant box?
 
