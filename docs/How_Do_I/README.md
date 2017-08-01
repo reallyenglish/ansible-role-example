@@ -58,6 +58,9 @@ Table of Contents
     * [How do I test a case that is not idempotent?](#how-do-i-test-a-case-that-is-not-idempotent)
       * [Problem](#problem-16)
       * [Solution](#solution-16)
+    * [How do I manage flags for service command, /etc/sysconfig/foo and <code>/etc/default/foo</code>?](#how-do-i-manage-flags-for-service-command-etcsysconfigfoo-and-etcdefaultfoo)
+      * [Problem](#problem-17)
+      * [Solution](#solution-17)
 
 ## How do I remove sensitive information from logs?
 
@@ -773,3 +776,118 @@ only the number of changes that the role has made to the system.
           add path 'bpf' group network
           add path 'bpf' mode 660
 ```
+
+## How do I manage flags for service command, `/etc/sysconfig/foo` and `/etc/default/foo`?
+
+### Problem
+
+Often, a service provides a way to specify additional command line flags for
+the service command. Different platform has a different mechanism to manage the
+flags, some even provides extra variables under `/etc/sysconfig` for
+RedHat-variants, `/etc/default` for Debian-variants, and `/etc/rc.conf.d` for
+FreeBSD. OpenBSD has a similar mechanism, but uses a single file,
+`/etc/rc.conf.local`.
+
+### Solution
+
+Define `foo_flags` and `foo_flags_default` in `defalts/main.yml`. `foo_flags`
+is a dict for users to change the default, and `foo_flags_default` is a dict
+that contains platform's default variables and values. Merge them into
+`foo_flags_merged` so that `foo_flags` is combined with `foo_flags_default` as
+early as possible in `tasks/main.yml`. Use `foo_flags_merged` in the template.
+
+```yaml
+# defaults/main.yml
+
+# this variable must be an empty dict by default. do not surprise users by
+# changing default behaviour.
+foo_flags: {}
+foo_flags_default: "{{ __foo_flags_default }}"
+```
+
+```yaml
+# vars/RedHat.yml
+__foo_flags:
+    # XXX make sure keys and values defined here are same in the default
+    # installation, and the created file does not change the default behaviour
+    # when `foo_flags` is an empty dict, i.e. default.
+    VAR1: VALUE1
+    VAR2: VALUE2
+```
+
+```yaml
+# vars/OpenBSD.yml
+__foo_flags:
+    # XXX for OpenBSD, the variable should have a single key, `flags`, with its
+    # value set to empty string.
+    flags: ""
+```
+
+```yaml
+# tasks/main.yml
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- set_fact:
+    # more often than not, users want to modify a single value in the file.
+    # providing deafult variable and using `combine()` gives two benefits:
+    #
+    # * users do not have to specify all other default values they do not care
+    # * even when the defaults in the role are outdated, users can workaround
+    #   the issue by overriding foo_flags_default
+    foo_flags_merged: "{{ foo_flags_default | combine(foo_flags) }}"
+
+- include: "configure-{{ ansible_os_family }}.yml"
+
+- name: Start foo
+  service:
+    # XXX do not use `enable` here
+    name: foo
+    state: started
+```
+
+```yaml
+# tasks/configure-RedHat.yml
+- name: Create /etc/sysconfig/foo
+  template:
+    src: RedHat.sysconfig.j2
+    dest: /etc/sysconfig/foo
+    # create a backup file for reference
+    backup: yes 
+    validate: sh -n %s
+  notify: Restart foo
+
+- name: Enable foo
+  service:
+    name: "{{ foo_service }}"
+    enabled: yes
+```
+
+```yaml
+# tasks/configure-OpenBSD.yml
+- name: Enable foo
+  service:
+    name: "{{ foo_service }}"
+    enabled: yes 
+    arguments: "{{ foo_flags_merged.flags }}"
+```
+
+```html+jinja
+# templates/RedHat.sysconfig.j2, Debian.default.j2 and FreeBSD.rc.d.j2
+{% for k, v in foo_flags_merged | dictsort() %}
+{{ k }}="{{ v }}"
+{% endfor %}
+```
+
+Some important things to note:
+
+* Explicitly `enable` the service in `configure-RedHat.yml`. Due to a bug (IMO)
+  in `ansible`, the service module modifies command line flags in OpenBSD.
+* Some _broken_ startup scripts encourage users to add additional commands,
+  such as `ulimit`, in the templated files. When this is the case, you need to
+  come up with a special key in `foo_flags` and handle the case in the
+  templates.
+* When testing `/etc/rc.conf.local` in unit test for OpenBSD, remember that,
+  when  default `foo_flags`is set in `/etc/rc.d/foo` _AND_ the `arguments` value
+  given to service module are same, `foo_flags` in `/etc/rc.conf.local` is set
+  to null, i.e. `foo_flags=`. Always set non-default value in the test suite.
