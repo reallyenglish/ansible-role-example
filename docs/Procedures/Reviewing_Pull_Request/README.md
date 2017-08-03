@@ -20,11 +20,9 @@ development.
 Although reviewing is always subjective, use this document as a checklist when
 reviewing PR.
 
-## When to review
+## Overview
 
-When creating a PR, the author of the PR must request review, enforced by
-settings in project and role repositories. Merging PRs is blocked until at
-least one reviewer approves PR.
+![Review workflow](../Asking_Review_and_Getting_Feedback/images/Asking_Review_and_Getting_Feedback.png)
 
 ## What to review
 

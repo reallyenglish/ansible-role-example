@@ -1,32 +1,32 @@
 Table of Contents
+Table of Contents
 =================
 
   * [Table of Contents](#table-of-contents)
   * [Creating a pull request](#creating-a-pull-request)
+    * [Overview](#overview)
     * [Before creating a PR](#before-creating-a-pr)
+      * [Leaving comments](#leaving-comments)
       * [Performing all tests locally](#performing-all-tests-locally)
       * [Pushing the branch](#pushing-the-branch)
     * [Creating a PR](#creating-a-pr)
-      * [Title](#title)
-      * [Description](#description)
-      * [Tags (optional)](#tags-optional)
-      * [Milestone (optional)](#milestone-optional)
-      * [Assignees](#assignees)
-      * [Reviewers](#reviewers)
+      * [Filling Title](#filling-title)
+      * [Filling Description](#filling-description)
+      * [Assigning the PR to author](#assigning-the-pr-to-author)
+      * [Adding Tags (optional)](#adding-tags-optional)
+      * [Adding Milestone (optional)](#adding-milestone-optional)
+      * [Fixing the branch](#fixing-the-branch)
       * [Submit the PR](#submit-the-pr)
-      * [Notifying the reviewers (optional)](#notifying-the-reviewers-optional)
     * [Fixing or correcting the PR](#fixing-or-correcting-the-pr)
-    * [Merging](#merging)
-    * [Closing the PR](#closing-the-pr)
-    * [Making sure that the master branch is successfully built](#making-sure-that-the-master-branch-is-successfully-built)
+    * [Proceed to the next procedure](#proceed-to-the-next-procedure)
 
 # Creating a pull request
 
 When you create a PR, follow the procedures below.
 
-## Work flow
+## Overview
 
-![Work flow](diagram.png)
+![Creating Pull Request](images/Creating_Pull_Request.png)
 
 ## Before creating a PR
 
@@ -48,16 +48,15 @@ justification.
 
 ### Pushing the branch
 
-Push the branch to `origin`. Jenkins pulls the branch, tests it, and report the
-test result in hipchat. Make sure that the result is successful. If not, fix
-the branch and repeat.
+Push the branch to `origin`. When a branch has been pushed, github shows a
+helpful notification at the top page of the repository.
 
 ## Creating a PR
 
-After your branch passes the tests, create a pull request. The official help is
+Create a pull request. The official help is
 available at [Creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
-### Title
+### Filling Title
 
 The title should be prefixed with the following tags.
 
@@ -89,64 +88,35 @@ Examples:
 
 Make sure that the branch has no conflicts with `master`.
 
-### Description
+### Filling Description
 
 Describe the PR, and the issue you have solved. Add any references, such as issues, URLs, or commit logs. Use
 [keywords to automatically close issues](https://help.github.com/articles/closing-issues-via-commit-messages/).
 
-### Tags (optional)
-
-Choose appropriate tags described in [Triaging_Issue](../Triaging_Issue).
-
-### Milestone (optional)
-
-If you have a specific milestone that the PR should be included, assign one.
-
-### Assignees
+### Assigning the PR to author
 
 Assign the PR to yourself.
 
-### Reviewers
+### Adding Tags (optional)
 
-Request a review by assigning it to one or more of Project Members when the all
-required tests have passed. Choose one with enough knowledge of the context.
+Choose appropriate tags described in [Triaging_Issue](../Triaging_Issue).
+
+### Adding Milestone (optional)
+
+If you have a specific milestone that the PR should be included, assign the PR
+to one.
 
 ### Submit the PR
 
 Submit the PR by `Create pull request`.
 
-### Notifying the reviewers (optional)
+### Fixing the branch
 
-It is not mandatory but recommended to notify the reviewers. Github sends
-notifications to the reviewers but it is always a good idea to make sure your
-PR is not forgotten.
+When all tests finish after creating the PR, make sure all the tests have
+passed. Fix issues and tests by pushing the fixes to the remote branch until
+all the tests pass.
 
-## Fixing or correcting the PR
+## Proceed to the next procedure
 
-When the review finishes, and the reviewer leaves comments and/or asks
-modifications, change the code or discuss with the reviewer. Repeat until the
-reviewer approves. Should the discussion stacks, ask the Project Owner.
-
-## Merging
-
-When the PR is approved, merge the PR into `master` branch.
-
-Make sure that:
-
-* all the tests pass in github. Broken branch or untested branch must not be
-  merged.
-* the branch has no conflicts with `master`
-
-Merge the branch by "Squash and merge". It _squashes_ multiple commits in the
-PR into a single commit and merge the branch. This makes commit logs clean and
-preserve each commit in the history.
-
-## Closing the PR
-
-Close the PR after the merge and delete the branch. Merged branches should not
-be left in the repository.
-
-## Making sure that the master branch is successfully built
-
-The `master` branch should always be built fine after the merge. Should it
-break, create an issue.
+Now you have successfully created a PR. Proceed to
+[Asking Review and Getting Feedback](../Asking_Review_and_Getting_Feedback).

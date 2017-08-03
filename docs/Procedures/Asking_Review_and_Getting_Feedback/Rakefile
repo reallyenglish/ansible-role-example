@@ -1,0 +1,9 @@
+desc "Generate PNG files from SVG files under images"
+task :png do
+  svg_files = Rake::FileList["**/*.svg"]
+  svg_files.each do |src|
+    name = File.basename(src).split(".").first
+    dest = "images/#{name}.png"
+    sh "inkscape --without-gui --export-dpi=90 --export-png=#{dest} #{src}"
+  end
+end
