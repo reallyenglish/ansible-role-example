@@ -61,6 +61,9 @@ Table of Contents
     * [How do I manage flags for service command, /etc/sysconfig/foo and <code>/etc/default/foo</code>?](#how-do-i-manage-flags-for-service-command-etcsysconfigfoo-and-etcdefaultfoo)
       * [Problem](#problem-17)
       * [Solution](#solution-17)
+    * [How do I support TLS in a role?](#how-do-i-support-tls-in-a-role)
+      * [Problem](#problem-18)
+      * [Solution](#solution-18)
 
 ## How do I remove sensitive information from logs?
 
@@ -921,3 +924,93 @@ Some important things to note:
   when  default `foo_flags`is set in `/etc/rc.d/foo` _AND_ the `arguments` value
   given to service module are same, `foo_flags` in `/etc/rc.conf.local` is set
   to null, i.e. `foo_flags=`. Always set non-default value in the test suite.
+
+## How do I support TLS in a role?
+
+### Problem
+
+The application managed by the role supports TLS. Implementing certificate
+management looks re-inventing the wheel. How do I support TLS easily?
+
+### Solution
+
+Use
+[`reallyenglish.x509-certificate`](https://github.com/reallyenglish/ansible-role-x509-certificate).
+
+Add a button to enable TLS support to `defaults/main.yml`. The default should
+be `no`.
+
+```yaml
+# defaults/main.yml
+foo_include_role_x509_certificate: no
+```
+
+Create `include` task in `tasks/main.yml` after installing the package because
+you would need to set permissions on certificate files and the user must exist
+before `reallyenglish.x509-certificate` is executed.
+
+Including task file like this is  unnecessary if you do not support older
+`ansible` version than 2.2, in which `include_role` was implemented. But if you
+do, `include` is needed. Otherwise, as older `ansible` does not know
+`include_role`, it would raise an error.
+
+```yaml
+# tasks/main.yml
+- include: "x509.yml"
+  when:
+    - ansible_version.full | version_compare('2.2', '>=')
+    - foo_include_role_x509_certificate
+```
+
+In `tasks/x509.yml`, include `reallyenglish.x509-certificate` with
+`include_role`.
+
+```yaml
+# tasks/x509.yml
+
+# XXX this task should have been in `tasks/main.yml` but ansible older than 2.2
+# does not understand `include_role` and bails out.
+- name: Include x509-certificate
+  include_role:
+    name: reallyenglish.x509-certificate
+```
+
+To include `reallyenglish.x509-certificate`, the role must be there. This is
+not a _regular_ dependency, and you MUST NOT add a dependency on
+`reallyenglish.x509-certificate` to `meta/main.yml`.
+
+```yaml
+# requirements.yml
+- name: reallyenglish.x509-certificate
+```
+
+Lastly, update `README.md`.
+
+```
+# README.md
+
+## `foo_include_role_x509_certificate`
+
+When `yes`, the role includes and executes
+[`reallyenglish.x509`](https://github.com/reallyenglish/ansible-role-x509-certificate)
+during the play, which makes it possible to manage certificates without ugly
+hacks. This is only supported in `ansible` version _at least_ 2.2 and later.
+```
+
+Why not make the role depend on `reallyenglish.x509-certificate`? Because
+dependency (or requiring a role in roles) in `meta/main.yml` forces the
+dependent role to be executed before the depending role. While the private key
+is almost always owned by a user or a group, but they do not exist yet because the
+user or the group is not created yet. Creating the key pair after initial play
+is possible but not when you need TLS enabled from the beginning because the
+key pair needs to be in place with correct owner, group and permission in the
+middle of the play.
+
+There was a bug in `ansible`, which causes the included role skipped. See issue
+[25136](https://github.com/ansible/ansible/issues/25136). In short, if the
+depending role has hard-dependency in `meta/main.yml` with conditional, such as
+`when: ansible_os_family == 'RedHat'`, the included role is skipped when the
+conditional is not met. This was fixed in
+[495a809f](https://github.com/ansible/ansible/commit/495a809f469dcb19f27d61993554b80c7bf79e9b).
+If the role has a hard-dependency and cannot remove it, you cannot use this
+solution.
