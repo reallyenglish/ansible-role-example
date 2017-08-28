@@ -64,6 +64,9 @@ Table of Contents
     * [How do I support TLS in a role?](#how-do-i-support-tls-in-a-role)
       * [Problem](#problem-18)
       * [Solution](#solution-18)
+    * [How do I retry some tests that fail randomly?](#how-do-i-retry-some-tests-that-fail-randomly)
+      * [Problem](#problem-19)
+      * [Solution](#solution-19)
 
 ## How do I remove sensitive information from logs?
 
@@ -1014,3 +1017,44 @@ conditional is not met. This was fixed in
 [495a809f](https://github.com/ansible/ansible/commit/495a809f469dcb19f27d61993554b80c7bf79e9b).
 If the role has a hard-dependency and cannot remove it, you cannot use this
 solution.
+
+## How do I retry some tests that fail randomly?
+
+### Problem
+
+Some tests fail initially, only succeed after some delays. How do I retry such tests?
+
+### Solution
+
+Use [`rspec-retry`](https://github.com/NoRedInk/rspec-retry).
+
+Add `rspec-retry` to `Gemfile` (note that version could be different).
+
+```ruby
+gem "rspec-retry", "~> 0.5.5"
+```
+
+In `spec_helper`:
+
+```ruby
+require "rspec/retry"
+
+# optionally, be verbose
+RSpec.configure do |config|
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
+end
+```
+
+In spec files:
+
+```ruby
+describe server(:server1) do
+  it "does something", retry: 10, retry_wait: 10 do
+  # your test goes here
+  end
+end
+```
+
+`retry` and `retry_wait` depend on various factors. Identify optimal values by
+trial and error.
