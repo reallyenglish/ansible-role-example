@@ -1078,35 +1078,18 @@ of dict can be validated.
 ```yaml
 - include_vars: "{{ ansible_os_family }}.yml"
 
-- assert:
-    msg: monit_conf_extra_include_dir must be sequence, or list
+- name: Assert foo is sequence
+  assert:
+    msg: variable `foo` must be sequence, or list
     that:
-      - monit_conf_extra_include_dir is sequence
+      - foo is sequence
 
-- assert:
-    msg: "`path` of item in monit_conf_extra_include_dir must exist and must be string"
+- name: Assert all elements in foo have bar as a key
+  assert
+    msg: dict element of `foo` must have `bar` as a key
     that:
-      - "'path' in item"
-      - item.path is string
-
-  with_items: "{{ monit_conf_extra_include_dir }}"
-- assert:
-    msg: "`state` of item in monit_conf_extra_include_dir must exist and must be either `enabled` or `disabled`"
-    that:
-      - "'state' in item"
-      - item.state == 'enabled' or item.state == 'disabled'
-  with_items: "{{ monit_conf_extra_include_dir }}"
-
-- assert:
-    msg: item in monit_conf_extra_include_dir must have `path`, `mode`, `owner`, and `group` as key when `state` is enabled
-    that:
-      - "'path' in item"
-      - "'mode' in item"
-      - "'owner' in item"
-      - "'group' in item"
-  when:
-    - item.state == 'enabled'
-  with_items: "{{ monit_conf_extra_include_dir }}"
+      - "'bar' in item"
+  with_items: "{{ foo }}"
 ```
 
 Note that the validation part is right after the `include_vars`, which is the
