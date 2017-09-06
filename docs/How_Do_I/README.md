@@ -67,6 +67,9 @@ Table of Contents
     * [How do I retry some tests that fail randomly?](#how-do-i-retry-some-tests-that-fail-randomly)
       * [Problem](#problem-19)
       * [Solution](#solution-19)
+    * [How do I enforce a variable is a certain type of object, or has necessary attributes?](#how-do-i-enforce-a-variable-is-a-certain-type-of-object-or-has-necessary-attributes)
+      * [Problem](#problem-20)
+      * [Solution](#solution-20)
 
 ## How do I remove sensitive information from logs?
 
@@ -1058,3 +1061,40 @@ end
 
 `retry` and `retry_wait` depend on various factors. Identify optimal values by
 trial and error.
+
+## How do I enforce a variable is a certain type of object, or has necessary attributes?
+
+### Problem
+
+Some tasks assume that a variable is a dict with a set of mandatory attributes
+set, a list, or string. Instead of bailing out with `ansible` error during
+play, you would like to validate the variable as early as possible.
+
+### Solution
+
+Use `assert` module. The following example illustrates how a user-provided list
+of dict can be validated.
+
+```yaml
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Assert foo is sequence
+  assert:
+    msg: variable `foo` must be sequence, or list
+    that:
+      - foo is sequence
+
+- name: Assert all elements in foo have bar as a key
+  assert
+    msg: dict element of `foo` must have `bar` as a key
+    that:
+      - "'bar' in item"
+  with_items: "{{ foo }}"
+```
+
+Note that the validation part is right after the `include_vars`, which is the
+earliest place where you can warn users.
+
+`assert` should be used not only when you validate user-defined variables but
+when you do complex variable operations in roles.  `assert` can assert on
+variables, which cannot be accomplished by unit or integration tests.
