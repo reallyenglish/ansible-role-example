@@ -45,12 +45,12 @@ Table of Contents
 # Creating a role
 
 When creating a role, use
-[qansible](https://github.com/trombik/qansible) It creates all directories and
+[qansible](https://github.com/reallyenglish/qansible) It creates all directories and
 files.
 
 ## Creating a role with `qansible init`
 
-Download and install [`qansible`](https://github.com/trombik/qansible).
+Download and install [`qansible`](https://github.com/reallyenglish/qansible).
 
 ```
 > qansible init ansible-role-foo

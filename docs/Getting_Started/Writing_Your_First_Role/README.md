@@ -24,7 +24,7 @@ Table of Contents
 
 ## Create your role
 
-Install [qansible](https://github.com/trombik/qansible). Run:
+Install [qansible](https://github.com/reallyenglish/qansible). Run:
 
     > qansible init ansible-role-example
     > cd ansible-role-example

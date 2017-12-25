@@ -66,15 +66,15 @@ such as `/usr/bin/rsync` and breaks `kitchen provision` (first `kitchen
 provision` succeeds but the second one fails).
 
 A local branch,
-[without\_full\_path\_to\_rsync](https://github.com/trombik/kitchen-sync/tree/without_full_path_to_rsync),
+[without\_full\_path\_to\_rsync](https://github.com/reallyenglish/kitchen-sync/tree/without_full_path_to_rsync),
 fixed the issue. The branch assumes that both local, where kitchen-test is
 invoked, and remote VM have rsync installed. The following VM images are supported:
 
-* [trombik/ansible-freebsd-10.3-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-freebsd-10.3-amd64)
-* [trombik/ansible-openbsd-6.0-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-openbsd-6.0-amd64)
-* [trombik/ansible-openbsd-5.9-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-openbsd-5.9-amd64)
-* [trombik/ansible-ubuntu-14.04-amd64](https://atlas.hashicorp.com/trombik/boxes/ansible-ubuntu-14.04-amd64)
-* [trombik/ansible-centos-7.2-x86_64](https://atlas.hashicorp.com/trombik/boxes/ansible-centos-7.2-x86_64)
+* [mitsuruy/ansible-freebsd-10.3-amd64](https://atlas.hashicorp.com/mitsuruy/boxes/ansible-freebsd-10.3-amd64)
+* [mitsuruy/ansible-openbsd-6.0-amd64](https://atlas.hashicorp.com/mitsuruy/boxes/ansible-openbsd-6.0-amd64)
+* [mitsuruy/ansible-openbsd-5.9-amd64](https://atlas.hashicorp.com/mitsuruy/boxes/ansible-openbsd-5.9-amd64)
+* [mitsuruy/ansible-ubuntu-14.04-amd64](https://atlas.hashicorp.com/mitsuruy/boxes/ansible-ubuntu-14.04-amd64)
+* [mitsuruy/ansible-centos-7.2-x86_64](https://atlas.hashicorp.com/mitsuruy/boxes/ansible-centos-7.2-x86_64)
 
 These images has been created with packer templates found at
 [packer-templates](https://github.com/reallyenglish/packer-templates/tree/reallyenglish-master).
@@ -102,7 +102,7 @@ To use rsync transport:
 
 Add the gem to Gemfile:
 
-    gem "kitchen-sync", '~> 2.1.1', :git => 'https://github.com/trombik/kitchen-sync.git', :branch => 'without_full_path_to_rsync'
+    gem "kitchen-sync", '~> 2.1.1', :git => 'https://github.com/reallyenglish/kitchen-sync.git', :branch => 'without_full_path_to_rsync'
 
 Add the following yaml snippet to .kitchen.yml
 
